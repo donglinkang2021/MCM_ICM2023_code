@@ -1,0 +1,1302 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage{ctex}
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{lstm\_apply}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{lstmux7684demo}{%
+\section{lstm的demo}\label{lstmux7684demo}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{k+kn}{from} \PY{n+nn}{torch} \PY{k+kn}{import} \PY{n}{nn}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{define-the-network}{%
+\subsection{define the network}\label{define-the-network}}
+
+    \hypertarget{ux539fux7406}{%
+\subsubsection{原理}\label{ux539fux7406}}
+
+\begin{center}
+	\adjustimage{max size={0.9\linewidth}{0.5\paperheight}}{lstm.jpg}
+\end{center}
+
+
+\[
+\begin{array}{ll} \\
+    i_t = \sigma(W_{ii} x_t + b_{ii} + W_{hi} h_{t-1} + b_{hi}) \\
+    f_t = \sigma(W_{if} x_t + b_{if} + W_{hf} h_{t-1} + b_{hf}) \\
+    g_t = \tanh(W_{ig} x_t + b_{ig} + W_{hg} h_{t-1} + b_{hg}) \\
+    o_t = \sigma(W_{io} x_t + b_{io} + W_{ho} h_{t-1} + b_{ho}) \\
+    c_t = f_t \odot c_{t-1} + i_t \odot g_t \\
+    h_t = o_t \odot \tanh(c_t) \\
+\end{array}
+\]
+
+\begin{quote}
+注：上面的下标是指从什么到什么，比如\(W_{ii}\)表示从输入到输入的权重，\(W_{ig}\)表示从输入到门的权重，\(W_{hg}\)表示从隐藏层到门的权重，\(W_{ho}\)表示从隐藏层到输出的权重，\(W_{hf}\)表示从隐藏层到遗忘门的权重，\(W_{hi}\)表示从隐藏层到输入门的权重。\(b_{ii}\)表示从输入到输入的偏置，\(b_{ig}\)表示从输入到门的偏置，\(b_{hg}\)表示从隐藏层到门的偏置，\(b_{ho}\)表示从隐藏层到输出的偏置，\(b_{hf}\)表示从隐藏层到遗忘门的偏置，\(b_{hi}\)表示从隐藏层到输入门的偏置。\(i_t\)表示输入门，\(f_t\)表示遗忘门，\(g_t\)表示门，\(o_t\)表示输出门，\(c_t\)表示记忆单元，\(h_t\)表示隐藏层。
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class} \PY{n+nc}{RegLSTM}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{inp\PYZus{}dim}\PY{p}{,} \PY{n}{out\PYZus{}dim}\PY{p}{,} \PY{n}{mid\PYZus{}dim}\PY{p}{,} \PY{n}{mid\PYZus{}layers}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{super}\PY{p}{(}\PY{n}{RegLSTM}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{rnn} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{LSTM}\PY{p}{(}\PY{n}{inp\PYZus{}dim}\PY{p}{,} \PY{n}{mid\PYZus{}dim}\PY{p}{,} \PY{n}{mid\PYZus{}layers}\PY{p}{)}  
+        \PY{c+c1}{\PYZsh{} rnn layer 在自然语言处理中，第一个参数通常是embedding的维度，第二个参数是隐藏层的维度，第三个参数是层数}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{reg} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Sequential}\PY{p}{(}
+            \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{mid\PYZus{}dim}\PY{p}{,} \PY{n}{mid\PYZus{}dim}\PY{p}{)}\PY{p}{,}
+            \PY{n}{nn}\PY{o}{.}\PY{n}{Tanh}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+            \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{mid\PYZus{}dim}\PY{p}{,} \PY{n}{out\PYZus{}dim}\PY{p}{)}\PY{p}{,}
+        \PY{p}{)}  \PY{c+c1}{\PYZsh{} regression}
+
+    \PY{k}{def} \PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{:}
+        \PY{n}{y} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{rnn}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}  \PY{c+c1}{\PYZsh{} y, (h, c) = self.rnn(x)}
+
+        \PY{n}{seq\PYZus{}len}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{p}{,} \PY{n}{hid\PYZus{}dim} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{shape}
+        \PY{n}{y} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{view}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{hid\PYZus{}dim}\PY{p}{)} \PY{c+c1}{\PYZsh{} y = y.view(seq\PYZus{}len * batch\PYZus{}size, hid\PYZus{}dim)}
+        \PY{n}{y} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{reg}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+        \PY{n}{y} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{view}\PY{p}{(}\PY{n}{seq\PYZus{}len}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)} \PY{c+c1}{\PYZsh{} y = y.view(seq\PYZus{}len, batch\PYZus{}size, out\PYZus{}dim)}
+        \PY{k}{return} \PY{n}{y}
+
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    PyCharm Crtl+click nn.LSTM() jump to code of PyTorch:}
+\PY{l+s+sd}{    Examples::}
+\PY{l+s+sd}{        \PYZgt{}\PYZgt{}\PYZgt{} rnn = nn.LSTM(10, 20, 2)}
+\PY{l+s+sd}{        \PYZgt{}\PYZgt{}\PYZgt{} input = torch.randn(5, 3, 10)}
+\PY{l+s+sd}{        \PYZgt{}\PYZgt{}\PYZgt{} h0 = torch.randn(2, 3, 20)}
+\PY{l+s+sd}{        \PYZgt{}\PYZgt{}\PYZgt{} c0 = torch.randn(2, 3, 20)}
+\PY{l+s+sd}{        \PYZgt{}\PYZgt{}\PYZgt{} output, (hn, cn) = rnn(input, (h0, c0))}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+
+    \PY{k}{def} \PY{n+nf}{output\PYZus{}y\PYZus{}hc\PYZus{}for\PYZus{}test}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{hc}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} 后面计算loss的时候，需要用到y和hc，所以这里需要单独写一个函数}
+        \PY{n}{y}\PY{p}{,} \PY{n}{hc} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{rnn}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{hc}\PY{p}{)}  \PY{c+c1}{\PYZsh{} y, (h, c) = self.rnn(x)}
+
+        \PY{n}{seq\PYZus{}len}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{p}{,} \PY{n}{hid\PYZus{}dim} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}
+        \PY{n}{y} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{view}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{hid\PYZus{}dim}\PY{p}{)}
+        \PY{n}{y} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{reg}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+        \PY{n}{y} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{view}\PY{p}{(}\PY{n}{seq\PYZus{}len}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{k}{return} \PY{n}{y}\PY{p}{,} \PY{n}{hc}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ux53c2ux6570ux8bbeux5b9a}{%
+\subsubsection{参数设定}\label{ux53c2ux6570ux8bbeux5b9a}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{inp\PYZus{}dim} \PY{o}{=} \PY{l+m+mi}{1} \PY{c+c1}{\PYZsh{} 输入维度 我们是（reported result）一个维度}
+\PY{n}{out\PYZus{}dim} \PY{o}{=} \PY{l+m+mi}{1} \PY{c+c1}{\PYZsh{} 输出维度 我们是预测客流量，所以是1}
+\PY{n}{mid\PYZus{}dim} \PY{o}{=} \PY{l+m+mi}{10} \PY{c+c1}{\PYZsh{} 隐藏层维度}
+\PY{n}{mid\PYZus{}layers} \PY{o}{=} \PY{l+m+mi}{1} \PY{c+c1}{\PYZsh{} 隐藏层层数}
+\PY{c+c1}{\PYZsh{} batch\PYZus{}size = 12 * 4 \PYZsh{} 我们划分成48个batch \PYZlt{}\PYZhy{}\PYZhy{} 后面改}
+\PY{n}{batch\PYZus{}size} \PY{o}{=} \PY{l+m+mi}{100}
+\PY{n}{mod\PYZus{}dir} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{load-data}{%
+\subsubsection{load data}\label{load-data}}
+
+    \hypertarget{for-data-1}{%
+\subparagraph{for data 1}\label{for-data-1}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{c+c1}{\PYZsh{} 读取数据}
+\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{df\PYZus{}Number\PYZus{}of\PYZus{}reported\PYZus{}results.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{seq\PYZus{}number} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{values}
+\PY{c+c1}{\PYZsh{} 需要先反转}
+\PY{n}{seq\PYZus{}number} \PY{o}{=} \PY{n}{seq\PYZus{}number}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{for-data-2}{%
+\subparagraph{for data 2}\label{for-data-2}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} \PYZsh{} passengers number of international airline , 1949\PYZhy{}01 \PYZti{} 1960\PYZhy{}12 per month}
+\PY{c+c1}{\PYZsh{} seq\PYZus{}number = np.array(}
+\PY{c+c1}{\PYZsh{}     [112., 118., 132., 129., 121., 135., 148., 148., 136., 119., 104.,}
+\PY{c+c1}{\PYZsh{}         118., 115., 126., 141., 135., 125., 149., 170., 170., 158., 133.,}
+\PY{c+c1}{\PYZsh{}         114., 140., 145., 150., 178., 163., 172., 178., 199., 199., 184.,}
+\PY{c+c1}{\PYZsh{}         162., 146., 166., 171., 180., 193., 181., 183., 218., 230., 242.,}
+\PY{c+c1}{\PYZsh{}         209., 191., 172., 194., 196., 196., 236., 235., 229., 243., 264.,}
+\PY{c+c1}{\PYZsh{}         272., 237., 211., 180., 201., 204., 188., 235., 227., 234., 264.,}
+\PY{c+c1}{\PYZsh{}         302., 293., 259., 229., 203., 229., 242., 233., 267., 269., 270.,}
+\PY{c+c1}{\PYZsh{}         315., 364., 347., 312., 274., 237., 278., 284., 277., 317., 313.,}
+\PY{c+c1}{\PYZsh{}         318., 374., 413., 405., 355., 306., 271., 306., 315., 301., 356.,}
+\PY{c+c1}{\PYZsh{}         348., 355., 422., 465., 467., 404., 347., 305., 336., 340., 318.,}
+\PY{c+c1}{\PYZsh{}         362., 348., 363., 435., 491., 505., 404., 359., 310., 337., 360.,}
+\PY{c+c1}{\PYZsh{}         342., 406., 396., 420., 472., 548., 559., 463., 407., 362., 405.,}
+\PY{c+c1}{\PYZsh{}         417., 391., 419., 461., 472., 535., 622., 606., 508., 461., 390.,}
+\PY{c+c1}{\PYZsh{}         432.], dtype=np.float32)}
+\PY{c+c1}{\PYZsh{} \PYZsh{} 给seq\PYZus{}number增加一个维度，变成2维的}
+\PY{c+c1}{\PYZsh{} seq\PYZus{}number = seq\PYZus{}number[:, np.newaxis]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{show-data}{%
+\subparagraph{show data}\label{show-data}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{seq\PYZus{}number}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+[<matplotlib.lines.Line2D at 0x1d1a6108dc0>]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{seq\PYZus{}number}\PY{o}{.}\PY{n}{shape} \PY{c+c1}{\PYZsh{} 1月17号到12月31号的数据，共359天}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(359, 1)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{seq} \PY{o}{=} \PY{n}{seq\PYZus{}number} \PY{c+c1}{\PYZsh{} 所以最终的形式是（当天reported result） }
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 转化成浮点数}
+\PY{n}{seq} \PY{o}{=} \PY{n}{seq}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{float32}\PY{p}{)}
+\PY{n}{seq}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([[ 80630.],
+       [101503.],
+       [ 91477.],
+       [107134.],
+       [153880.]], dtype=float32)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} normalization}
+\PY{n}{seq\PYZus{}mean} \PY{o}{=} \PY{n}{seq}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{seq\PYZus{}std} \PY{o}{=} \PY{n}{seq}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{seq\PYZus{}norm} \PY{o}{=} \PY{p}{(}\PY{n}{seq} \PY{o}{\PYZhy{}} \PY{n}{seq\PYZus{}mean}\PY{p}{)} \PY{o}{/} \PY{n}{seq\PYZus{}std}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{seq\PYZus{}norm}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([[-0.11607783],
+       [ 0.11818092],
+       [ 0.00565861],
+       [ 0.18137792],
+       [ 0.7060107 ]], dtype=float32)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data} \PY{o}{=} \PY{n}{seq\PYZus{}norm} 
+\PY{n}{data\PYZus{}x} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{p}{:}\PY{p}{]} \PY{c+c1}{\PYZsh{} 从0到倒数第二个}
+\PY{n}{data\PYZus{}y} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{c+c1}{\PYZsh{} 从1到最后一个}
+\PY{k}{assert} \PY{n}{data\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{==} \PY{n}{inp\PYZus{}dim}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data\PYZus{}x[:5]:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{data\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data\PYZus{}y[:5]:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{data\PYZus{}y}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data\PYZus{}x.shape:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{data\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data\PYZus{}y.shape:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{data\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+data\_x[:5]: [[-0.11607783]
+ [ 0.11818092]
+ [ 0.00565861]
+ [ 0.18137792]
+ [ 0.7060107 ]]
+data\_y[:5]: [0.11818092 0.00565861 0.18137792 0.7060107  0.5231423 ]
+data\_x.shape: (358, 1)
+data\_y.shape: (358,)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{} 2022.2.17到2022.10.29 都是训练集，2022.10.30到2022.12.31都是测试集 也就是一共 497 \PYZhy{} 202 + 1 = 296天 }
+\PY{c+c1}{\PYZsh{} 296/len(data\PYZus{}x) \PYZsh{} \PYZlt{}\PYZhy{}\PYZhy{} for data1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} split train and test}
+\PY{c+c1}{\PYZsh{} train\PYZus{}size = 296 \PYZsh{} for data1}
+\PY{n}{train\PYZus{}size} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{data\PYZus{}x}\PY{p}{)} \PY{o}{*} \PY{l+m+mf}{0.70}\PY{p}{)} \PY{c+c1}{\PYZsh{} 75\PYZpc{}的数据作为训练集 for data2}
+
+\PY{n}{train\PYZus{}x} \PY{o}{=} \PY{n}{data\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{n}{train\PYZus{}size}\PY{p}{]}
+\PY{n}{train\PYZus{}y} \PY{o}{=} \PY{n}{data\PYZus{}y}\PY{p}{[}\PY{p}{:}\PY{n}{train\PYZus{}size}\PY{p}{]}
+
+\PY{n}{train\PYZus{}x} \PY{o}{=} \PY{n}{train\PYZus{}x}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{n}{train\PYZus{}size}\PY{p}{,} \PY{n}{inp\PYZus{}dim}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} 296, 1}
+\PY{n}{train\PYZus{}y} \PY{o}{=} \PY{n}{train\PYZus{}y}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{n}{train\PYZus{}size}\PY{p}{,} \PY{n}{out\PYZus{}dim}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} 296, 1}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{train\PYZus{}x.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{train\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{train\PYZus{}y.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{train\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+train\_x.shape:  (250, 1)
+train\_y.shape:  (250, 1)
+    \end{Verbatim}
+
+    \hypertarget{build-model}{%
+\subsubsection{build model}\label{build-model}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cuda}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{cuda}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{net} \PY{o}{=} \PY{n}{RegLSTM}\PY{p}{(}\PY{n}{inp\PYZus{}dim}\PY{p}{,} \PY{n}{out\PYZus{}dim}\PY{p}{,} \PY{n}{mid\PYZus{}dim}\PY{p}{,} \PY{n}{mid\PYZus{}layers}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+\PY{n}{criterion} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{MSELoss}\PY{p}{(}\PY{p}{)}
+\PY{n}{optimizer} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n}{net}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{torchinfo} \PY{k+kn}{import} \PY{n}{summary}
+\PY{n}{summary}\PY{p}{(}\PY{n}{net}\PY{p}{,} \PY{n}{input\PYZus{}size}\PY{o}{=}\PY{p}{(}\PY{n}{batch\PYZus{}size} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+================================================================================
+==========
+Layer (type:depth-idx)                   Output Shape              Param \#
+================================================================================
+==========
+RegLSTM                                  [99, 100, 1]              --
+├─LSTM: 1-1                              [99, 100, 10]             520
+├─Sequential: 1-2                        [9900, 1]                 --
+│    └─Linear: 2-1                       [9900, 10]                110
+│    └─Tanh: 2-2                         [9900, 10]                --
+│    └─Linear: 2-3                       [9900, 1]                 11
+================================================================================
+==========
+Total params: 641
+Trainable params: 641
+Non-trainable params: 0
+Total mult-adds (M): 6.35
+================================================================================
+==========
+Input size (MB): 0.04
+Forward/backward pass size (MB): 1.66
+Params size (MB): 0.00
+Estimated Total Size (MB): 1.71
+================================================================================
+==========
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{train}{%
+\subsubsection{train}\label{train}}
+
+    \hypertarget{ux5236ux4f5cbatch}{%
+\paragraph{制作batch}\label{ux5236ux4f5cbatch}}
+
+\begin{center}
+	\adjustimage{max size={0.7\linewidth}{0.7\paperheight}}{lstm_batch.drawio.png}
+\end{center}
+
+我们首先制作train的batch，然后训练模型。
+
+制作batch的方法是选取不同开头但截止一样的序列，然后将这些序列组合成一个batch。
+
+    \hypertarget{ux5236ux4f5cux4e00ux4e2abatch}{%
+\subparagraph{制作一个batch}\label{ux5236ux4f5cux4e00ux4e2abatch}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} var\PYZus{}x = torch.tensor(train\PYZus{}x, dtype=torch.float32, device=device)}
+\PY{c+c1}{\PYZsh{} var\PYZus{}y = torch.tensor(train\PYZus{}y, dtype=torch.float32, device=device)}
+
+\PY{c+c1}{\PYZsh{} batch\PYZus{}var\PYZus{}x = list()}
+\PY{c+c1}{\PYZsh{} batch\PYZus{}var\PYZus{}y = list()}
+
+\PY{c+c1}{\PYZsh{} for roi\PYZus{}len in range(batch\PYZus{}size):}
+\PY{c+c1}{\PYZsh{}     begin\PYZus{}idx = train\PYZus{}size \PYZhy{} roi\PYZus{}len \PYZsh{} train\PYZus{}size = 296}
+\PY{c+c1}{\PYZsh{}     batch\PYZus{}var\PYZus{}x.append(var\PYZus{}x[begin\PYZus{}idx:])}
+\PY{c+c1}{\PYZsh{}     batch\PYZus{}var\PYZus{}y.append(var\PYZus{}y[begin\PYZus{}idx:])}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}var\PYZus{}x.shape: \PYZdq{}, var\PYZus{}x.shape)}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}var\PYZus{}y.shape: \PYZdq{}, var\PYZus{}y.shape)}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}batch\PYZus{}var\PYZus{}x[0].shape: \PYZdq{}, batch\PYZus{}var\PYZus{}x[0].shape)}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}batch\PYZus{}var\PYZus{}y[0].shape: \PYZdq{}, batch\PYZus{}var\PYZus{}y[0].shape)}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}batch\PYZus{}var\PYZus{}x[1].shape: \PYZdq{}, batch\PYZus{}var\PYZus{}x[\PYZhy{}1].shape)}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}batch\PYZus{}var\PYZus{}y[1].shape: \PYZdq{}, batch\PYZus{}var\PYZus{}y[\PYZhy{}1].shape)}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}batch\PYZus{}var\PYZus{}x.len: \PYZdq{}, len(batch\PYZus{}var\PYZus{}x))}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}batch\PYZus{}var\PYZus{}y.len: \PYZdq{}, len(batch\PYZus{}var\PYZus{}y))}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ux5236ux4f5cux591aux4e2amini_batchux4f7fux5f97ux4e00ux4e2aepochux53efux4ee5ux770bux5b8cux6240ux6709ux6570ux636e}{%
+\subparagraph{制作多个mini\_batch使得一个epoch可以看完所有数据}\label{ux5236ux4f5cux591aux4e2amini_batchux4f7fux5f97ux4e00ux4e2aepochux53efux4ee5ux770bux5b8cux6240ux6709ux6570ux636e}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{batch\PYZus{}size}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+100
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{train\PYZus{}size}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+250
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 那么我们大概需要再制作 4个batch就好了，重复是必须的}
+\PY{n}{var\PYZus{}x} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{n}{device}\PY{p}{)}
+\PY{n}{var\PYZus{}y} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{train\PYZus{}y}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{n}{device}\PY{p}{)}
+
+\PY{n}{batch\PYZus{}var\PYZus{}x} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}
+\PY{n}{batch\PYZus{}var\PYZus{}y} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{mini\PYZus{}batch\PYZus{}size} \PY{o}{=} \PY{l+m+mi}{5}
+
+\PY{k}{for} \PY{n}{num\PYZus{}of\PYZus{}batch} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{mini\PYZus{}batch\PYZus{}size}\PY{p}{)}\PY{p}{:}
+    \PY{n}{end\PYZus{}idx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{n}{batch\PYZus{}size}\PY{p}{,} \PY{n}{train\PYZus{}size}\PY{p}{)}
+    \PY{k}{for} \PY{n}{roi\PYZus{}len} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{batch\PYZus{}size}\PY{p}{)}\PY{p}{:}
+        \PY{n}{begin\PYZus{}idx} \PY{o}{=} \PY{n}{end\PYZus{}idx} \PY{o}{\PYZhy{}} \PY{n}{roi\PYZus{}len} 
+        \PY{n}{batch\PYZus{}var\PYZus{}x}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{var\PYZus{}x}\PY{p}{[}\PY{n}{begin\PYZus{}idx}\PY{p}{:}\PY{n}{end\PYZus{}idx}\PY{p}{]}\PY{p}{)}
+        \PY{n}{batch\PYZus{}var\PYZus{}y}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{var\PYZus{}y}\PY{p}{[}\PY{n}{begin\PYZus{}idx}\PY{p}{:}\PY{n}{end\PYZus{}idx}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{var\PYZus{}x.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{var\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{var\PYZus{}y.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{var\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}var\PYZus{}x[0].shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{batch\PYZus{}var\PYZus{}x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}var\PYZus{}y[0].shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{batch\PYZus{}var\PYZus{}y}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}var\PYZus{}x[\PYZhy{}1].shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{batch\PYZus{}var\PYZus{}x}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}var\PYZus{}y[\PYZhy{}1].shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{batch\PYZus{}var\PYZus{}y}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}var\PYZus{}x.len: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{batch\PYZus{}var\PYZus{}x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}var\PYZus{}y.len: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{batch\PYZus{}var\PYZus{}y}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+var\_x.shape:  torch.Size([250, 1])
+var\_y.shape:  torch.Size([250, 1])
+batch\_var\_x[0].shape:  torch.Size([0, 1])
+batch\_var\_y[0].shape:  torch.Size([0, 1])
+batch\_var\_x[-1].shape:  torch.Size([99, 1])
+batch\_var\_y[-1].shape:  torch.Size([99, 1])
+batch\_var\_x.len:  500
+batch\_var\_y.len:  500
+    \end{Verbatim}
+
+    \hypertarget{padding}{%
+\paragraph{padding}\label{padding}}
+
+\begin{center}
+	\adjustimage{max size={0.5\linewidth}{0.5\paperheight}}{lstm.drawio.png}
+\end{center}
+
+我们看到不同的batch的shape是不一样的，但是我们需要的是一样的，所以我们需要对batch进行padding，即在后面补0，使得所有的batch的shape都一样
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn}\PY{n+nn}{.}\PY{n+nn}{utils}\PY{n+nn}{.}\PY{n+nn}{rnn} \PY{k+kn}{import} \PY{n}{pad\PYZus{}sequence}
+\PY{n}{batch\PYZus{}var\PYZus{}x} \PY{o}{=} \PY{n}{pad\PYZus{}sequence}\PY{p}{(}\PY{n}{batch\PYZus{}var\PYZus{}x}\PY{p}{)}
+\PY{n}{batch\PYZus{}var\PYZus{}y} \PY{o}{=} \PY{n}{pad\PYZus{}sequence}\PY{p}{(}\PY{n}{batch\PYZus{}var\PYZus{}y}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}var\PYZus{}x.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{batch\PYZus{}var\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}var\PYZus{}y.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{batch\PYZus{}var\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+batch\_var\_x.shape:  torch.Size([99, 500, 1])
+batch\_var\_y.shape:  torch.Size([99, 500, 1])
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{batch\PYZus{}var\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{]} \PY{c+c1}{\PYZsh{} 对应上图的蓝色圆角矩形上方第一行数据前五个}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+tensor([[0.],
+        [0.],
+        [0.],
+        [0.],
+        [0.]])
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{batch\PYZus{}var\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{p}{:}\PY{p}{]}  \PY{c+c1}{\PYZsh{} 对应上图的蓝色圆角矩形所在行数据前五个}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+tensor([[-0.0579],
+        [ 0.0000],
+        [ 0.0000],
+        [ 0.0000],
+        [ 0.0000]])
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux9057ux5fd8ux66f2ux7ebfux63a7ux5236loss}{%
+\paragraph{遗忘曲线控制loss}\label{ux9057ux5fd8ux66f2ux7ebfux63a7ux5236loss}}
+
+这里为损失函数添加了类似遗忘曲线的东西，使得模型在训练的时候不会忘记之前的信息，而是会逐渐遗忘。
+
+\[
+weight1_{t} = tanh(e * \frac{t}{len(train_y)}) \quad \text{where} \quad t \in [0, len(train_y))
+\]
+
+试图改一下遗忘曲线，使得模型在训练的时候对近期记忆保持更多的记忆
+
+\[
+weight2_{t} = tanh\left (\alpha * \left (\frac{t}{len(train_y)}-1 \right ) \right )+1 \quad \text{where} \quad t \in [0, len(train_y))
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{weights} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{train\PYZus{}y}\PY{p}{)}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{e} \PY{o}{/} \PY{n+nb}{len}\PY{p}{(}\PY{n}{train\PYZus{}y}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{n}{weights} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{weights}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{n}{device}\PY{p}{)}
+
+\PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{alpha} \PY{o}{=} \PY{l+m+mi}{10}
+    \PY{n}{weights2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{tanh}\PY{p}{(} \PY{n}{alpha} \PY{o}{*}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{train\PYZus{}y}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{n+nb}{len}\PY{p}{(}\PY{n}{train\PYZus{}y}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1} 
+    \PY{n}{weights2} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{weights2}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{n}{device}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weights.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{weights}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+weights.shape:  torch.Size([250])
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 画出weights}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{weights}\PY{o}{.}\PY{n}{cpu}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{weights2}\PY{o}{.}\PY{n}{cpu}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} 画出客流量}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{train\PYZus{}y}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+[<matplotlib.lines.Line2D at 0x1d1a826f400>]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_42_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{ux5f00ux59cbux8badux7ec3}{%
+\paragraph{开始训练}\label{ux5f00ux59cbux8badux7ec3}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{net}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Training Start}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{epoch} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{800}\PY{p}{)}\PY{p}{:}
+    \PY{n}{out} \PY{o}{=} \PY{n}{net}\PY{p}{(}\PY{n}{batch\PYZus{}var\PYZus{}x}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} loss = (out \PYZhy{} batch\PYZus{}var\PYZus{}y) ** 2 * weights \PYZsh{} \PYZlt{}\PYZhy{}\PYZhy{} 使用weights }
+    \PY{c+c1}{\PYZsh{} test mse loss:  32856874.47789988}
+    \PY{c+c1}{\PYZsh{} loss = (out \PYZhy{} batch\PYZus{}var\PYZus{}y) ** 2 * weights2 \PYZsh{} \PYZlt{}\PYZhy{}\PYZhy{} 使用weights2 }
+    \PY{c+c1}{\PYZsh{} alpha = 2 test mse loss:  37580656.65421245}
+    \PY{c+c1}{\PYZsh{} alpha = 5 test mse loss:  28990949.182173382}
+    \PY{c+c1}{\PYZsh{} alpha = 7 test mse loss:  24158278.41746032}
+    \PY{c+c1}{\PYZsh{} alpha = 10 test mse loss:  32370050.34371184}
+    \PY{n}{loss} \PY{o}{=} \PY{p}{(}\PY{n}{out} \PY{o}{\PYZhy{}} \PY{n}{batch\PYZus{}var\PYZus{}y}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2} \PY{c+c1}{\PYZsh{} \PYZlt{}\PYZhy{}\PYZhy{} 不使用weights }
+    \PY{c+c1}{\PYZsh{} test mse loss:  13283323.04859585 结果最好}
+
+    \PY{n}{loss} \PY{o}{=} \PY{n}{loss}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+    
+    \PY{n}{optimizer}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+    \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+    \PY{n}{optimizer}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{if} \PY{n}{epoch} \PY{o}{\PYZpc{}} \PY{l+m+mi}{50} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Epoch: }\PY{l+s+si}{\PYZob{}:4\PYZcb{}}\PY{l+s+s1}{, Loss: }\PY{l+s+si}{\PYZob{}:.5f\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{epoch}\PY{p}{,} \PY{n}{loss}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Training End, Loss: }\PY{l+s+si}{\PYZob{}:.5f\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{loss}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Training Start
+Epoch:    0, Loss: 0.37251
+Epoch:   50, Loss: 0.01125
+Epoch:  100, Loss: 0.00961
+Epoch:  150, Loss: 0.00889
+Epoch:  200, Loss: 0.00834
+Epoch:  250, Loss: 0.00785
+Epoch:  300, Loss: 0.00748
+Epoch:  350, Loss: 0.00717
+Epoch:  400, Loss: 0.00699
+Epoch:  450, Loss: 0.00691
+Epoch:  500, Loss: 0.00680
+Epoch:  550, Loss: 0.00672
+Epoch:  600, Loss: 0.00664
+Epoch:  650, Loss: 0.00657
+Epoch:  700, Loss: 0.00685
+Epoch:  750, Loss: 0.00643
+Training End, Loss: 0.00636
+    \end{Verbatim}
+
+    保存参数
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} torch.save(net.state\PYZus{}dict(), \PYZsq{}\PYZob{}\PYZcb{}/net.pth\PYZsq{}.format(mod\PYZus{}dir))}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}Save in:\PYZdq{}, \PYZsq{}\PYZob{}\PYZcb{}/net.pth\PYZsq{}.format(mod\PYZus{}dir))}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{eval}{%
+\subsubsection{eval}\label{eval}}
+
+    制作test set
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{test\PYZus{}x} \PY{o}{=} \PY{n}{seq\PYZus{}norm}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)} 
+\PY{n}{test\PYZus{}x}\PY{p}{[}\PY{n}{train\PYZus{}size}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0} \PY{c+c1}{\PYZsh{} 设置为0，表示预测 }
+\PY{n}{test\PYZus{}x} \PY{o}{=} \PY{n}{test\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{newaxis}\PY{p}{,} \PY{p}{:}\PY{p}{]} 
+\PY{n}{test\PYZus{}x} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{n}{device}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}x.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{test\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+test\_x.shape:  torch.Size([359, 1, 1])
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} net.load\PYZus{}state\PYZus{}dict(torch.load(\PYZsq{}\PYZob{}\PYZcb{}/net.pth\PYZsq{}.format(mod\PYZus{}dir), map\PYZus{}location=lambda storage, loc: storage))}
+\PY{n}{net}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+RegLSTM(
+  (rnn): LSTM(1, 10)
+  (reg): Sequential(
+    (0): Linear(in\_features=10, out\_features=10, bias=True)
+    (1): Tanh()
+    (2): Linear(in\_features=10, out\_features=1, bias=True)
+  )
+)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}simple way is elegant\PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{train\PYZus{}size}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{n}{test\PYZus{}y} \PY{o}{=} \PY{n}{net}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+        \PY{n}{test\PYZus{}x}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{test\PYZus{}y}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+
+    \PY{n}{pred\PYZus{}y} \PY{o}{=} \PY{n}{test\PYZus{}x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{pred\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}y}\PY{o}{.}\PY{n}{cpu}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}
+
+    \PY{n}{diff\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}y}\PY{p}{[}\PY{n}{train\PYZus{}size}\PY{p}{:}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{data\PYZus{}y}\PY{p}{[}\PY{n}{train\PYZus{}size}\PY{p}{:}\PY{p}{]}
+    \PY{n}{l2\PYZus{}loss} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{diff\PYZus{}y} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ test mse loss: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{l2\PYZus{}loss}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ test mse loss:  0.007266506
+    \end{Verbatim}
+
+    \hypertarget{for-data-1}{%
+\subparagraph{for data 1}\label{for-data-1}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} origin\PYZus{}data = df.values}
+\PY{c+c1}{\PYZsh{} \PYZsh{} 反转}
+\PY{c+c1}{\PYZsh{} origin\PYZus{}data = origin\PYZus{}data[::\PYZhy{}1]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{for-data-2}{%
+\subparagraph{for data 2}\label{for-data-2}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{origin\PYZus{}data} \PY{o}{=} \PY{n}{seq}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pred\PYZus{}y.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{pred\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data\PYZus{}y.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{data\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{the last pred\PYZus{}y: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{pred\PYZus{}y}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{the last data\PYZus{}y: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{data\PYZus{}y}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+pred\_y.shape:  (358,)
+data\_y.shape:  (358,)
+the last pred\_y:  -0.646692
+the last data\_y:  -0.79226667
+    \end{Verbatim}
+
+    \hypertarget{ux6570ux636eux8fd8ux539f}{%
+\subparagraph{数据还原}\label{ux6570ux636eux8fd8ux539f}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{mean} \PY{o}{=} \PY{n}{origin\PYZus{}data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+\PY{n}{std} \PY{o}{=} \PY{n}{origin\PYZus{}data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mean: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{mean}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{std: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{std}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 将预测值还原}
+\PY{n}{pred\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}y} \PY{o}{*} \PY{n}{std} \PY{o}{+} \PY{n}{mean}
+\PY{c+c1}{\PYZsh{} 设置成int类型}
+\PY{n}{pred\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}y}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+mean:  90972.805
+std:  89102.33
+    \end{Verbatim}
+
+    \hypertarget{ux6c42mse-mean-squared-error}{%
+\subparagraph{求MSE (Mean Squared
+Error)}\label{ux6c42mse-mean-squared-error}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 和真实值对比求误差}
+\PY{n}{diff\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}y}\PY{p}{[}\PY{n}{train\PYZus{}size}\PY{p}{:}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{origin\PYZus{}data}\PY{p}{[}\PY{n}{train\PYZus{}size}\PY{p}{:}\PY{p}{]}
+\PY{n}{l2\PYZus{}loss} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{diff\PYZus{}y} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ test mse loss: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{l2\PYZus{}loss}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ test mse loss:  53422339.48335032
+    \end{Verbatim}
+
+    \hypertarget{ux9884ux6d4bux66f2ux7ebfux56fe}{%
+\subparagraph{预测曲线图}\label{ux9884ux6d4bux66f2ux7ebfux56fe}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{pred\PYZus{}y}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{origin\PYZus{}data}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{real}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{train\PYZus{}size}\PY{p}{,} \PY{n}{train\PYZus{}size}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{350000}\PY{p}{]}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train | pred}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} plt.savefig(\PYZsq{}pred\PYZus{}with\PYZus{}regularization\PYZus{}batch\PYZus{}lstm1.png\PYZsq{})}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.legend.Legend at 0x1d1a82f2250>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_62_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{ux957fux671fux9884ux6d4b}{%
+\paragraph{长期预测}\label{ux957fux671fux9884ux6d4b}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pred\PYZus{}result} \PY{o}{=} \PY{n}{seq\PYZus{}norm}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{pred\PYZus{}result} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{pred\PYZus{}result}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{60}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{pred\PYZus{}result}\PY{p}{[}\PY{n}{train\PYZus{}size}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0} \PY{c+c1}{\PYZsh{} 设置为0，表示预测 }
+\PY{n}{pred\PYZus{}result} \PY{o}{=} \PY{n}{pred\PYZus{}result}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{newaxis}\PY{p}{,} \PY{p}{:}\PY{p}{]} 
+\PY{n}{pred\PYZus{}result} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{pred\PYZus{}result}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{n}{device}\PY{p}{)}
+
+\PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}simple way is elegant\PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{train\PYZus{}size}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{60}\PY{p}{)}\PY{p}{:}
+        \PY{n}{test\PYZus{}y} \PY{o}{=} \PY{n}{net}\PY{p}{(}\PY{n}{pred\PYZus{}result}\PY{p}{[}\PY{p}{:}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+        \PY{n}{pred\PYZus{}result}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{test\PYZus{}y}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+
+    \PY{n}{pred\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}result}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{pred\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}y}\PY{o}{.}\PY{n}{cpu}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 还原}
+\PY{n}{pred\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}y} \PY{o}{*} \PY{n}{std} \PY{o}{+} \PY{n}{mean}
+\PY{n}{pred\PYZus{}y} \PY{o}{=} \PY{n}{pred\PYZus{}y}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{pred\PYZus{}y}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{origin\PYZus{}data}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{real}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{train\PYZus{}size}\PY{p}{,} \PY{n}{train\PYZus{}size}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{350000}\PY{p}{]}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train | pred}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} plt.savefig(\PYZsq{}pred\PYZus{}with\PYZus{}weight2\PYZus{}alpha\PYZus{}\PYZsq{} + str(alpha) + \PYZsq{}.png\PYZsq{})}
+\PY{c+c1}{\PYZsh{} plt.savefig(\PYZsq{}pred\PYZus{}with\PYZus{}no\PYZus{}weight\PYZus{}batchsize\PYZus{}\PYZsq{} + str(batch\PYZus{}size) + \PYZsq{}.png\PYZsq{})}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.legend.Legend at 0x1d1a9383940>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_66_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pred\PYZus{}y.shape: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{pred\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{final pred\PYZus{}y: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{pred\PYZus{}y}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+pred\_y.shape:  (418,)
+final pred\_y:  33352
+    \end{Verbatim}
+
+    \hypertarget{ux603bux8ba1ux6539ux8fdb}{%
+\subsubsection{总计改进}\label{ux603bux8ba1ux6539ux8fdb}}
+
+    由上面可以发现不加weights训练效果是最好的，我们多次进行不加weights的训练查看效果。
+
+我们下一步可以做的工作有， -
+制作mini\_batch，训练更多的数据而不是只有我们训练的一个batch而已 -
+重新确定好训练集和测试集的比例分割数据
+
+
+最优的一幅图
+
+\begin{center}
+	\adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{pred_with_regularization_batch_lstm2.png}
+\end{center}
+
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
